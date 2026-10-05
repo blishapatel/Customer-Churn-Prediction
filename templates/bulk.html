@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% block title %}Bulk Prediction — ChurnIQ{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section-header">
+        <h2><i class="fa-solid fa-file-upload"></i> Bulk Customer Prediction</h2>
+    </div>
+    <div class="alert alert-info">
+        Upload a CSV file of customer data to predict churn for all customers at once. Download the results with risk scores.
+    </div>
+
+    <div class="card">
+        <div class="upload-area" id="uploadArea" onclick="document.getElementById('csvInput').click()">
+            <i class="fa-solid fa-cloud-upload-alt upload-icon"></i>
+            <h3>Drag & Drop CSV File Here</h3>
+            <p>or click to browse files</p>
+            <input type="file" id="csvInput" accept=".csv" hidden>
+        </div>
+    </div>
+
+    <div class="sample-format mt-4 mb-4">
+        <h4>Expected CSV Format</h4>
+        <code>customerID, gender, SeniorCitizen, Partner, Dependents, tenure, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, Contract, PaperlessBilling, PaymentMethod, MonthlyCharges, TotalCharges</code>
+    </div>
+
+    <div id="bulkResults" style="display: none;">
+        <div class="section-header">
+            <h2>Prediction Results</h2>
+        </div>
+        
+        <div class="bulk-summary kpi-grid mb-4">
+            <div class="kpi-card">
+                <h3>Total Processed</h3>
+                <div class="value stat-value" id="totalProcessed">0</div>
+            </div>
+            <div class="kpi-card risk-summary-card high">
+                <h3>High Risk</h3>
+                <div class="value stat-value text-danger" id="highRiskCount">0</div>
+            </div>
+            <div class="kpi-card risk-summary-card medium">
+                <h3>Medium Risk</h3>
+                <div class="value stat-value text-warning" id="mediumRiskCount">0</div>
+            </div>
+            <div class="kpi-card risk-summary-card low">
+                <h3>Low Risk</h3>
+                <div class="value stat-value text-success" id="lowRiskCount">0</div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary" id="downloadBtn">
+                <i class="fa-solid fa-download"></i> Download Results CSV
+            </button>
+        </div>
+
+        <div class="table-wrapper">
+            <table id="resultsTable">
+                <thead>
+                    <tr>
+                        <th>customerID</th>
+                        <th>Tenure</th>
+                        <th>Contract</th>
+                        <th>Monthly Charges</th>
+                        <th>Internet Service</th>
+                        <th>Churn Probability</th>
+                        <th>Risk</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Filled dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Loading overlay -->
+<div id="loadingOverlay" class="loading-overlay" style="display: none;">
+    <div class="spinner"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const uploadArea = document.getElementById('uploadArea');
+    const csvInput = document.getElementById('csvInput');
+    const bulkResults = document.getElementById('bulkResults');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const downloadBtn = document.getElementById('downloadBtn');
+    let csvData = null;
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, () => uploadArea.classList.add('dragover'), false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'), false);
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files.length > 0) {
+            handleFile(files[0]);
+        }
+    });
+
+    csvInput.addEventListener('change', function() {
+        if (this.files.length > 0) {
+            handleFile(this.files[0]);
+        }
+    });
+
+    function handleFile(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        loadingOverlay.style.display = 'flex';
+        
+        fetch('/api/bulk', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadingOverlay.style.display = 'none';
+            if(data.error) {
+                alert('Error: ' + data.error);
+                return;
+            }
+            displayResults(data);
+        })
+        .catch(error => {
+            loadingOverlay.style.display = 'none';
+            alert('An error occurred while processing the file.');
+            console.error(error);
+        });
+    }
+
+    function displayResults(data) {
+        bulkResults.style.display = 'block';
+        
+        document.getElementById('totalProcessed').textContent = data.summary.total;
+        document.getElementById('highRiskCount').textContent = data.summary.high;
+        document.getElementById('mediumRiskCount').textContent = data.summary.medium;
+        document.getElementById('lowRiskCount').textContent = data.summary.low;
+        
+        const tbody = document.querySelector('#resultsTable tbody');
+        tbody.innerHTML = '';
+        
+        const rowsToShow = data.results.slice(0, 50);
+        
+        rowsToShow.forEach(row => {
+            const tr = document.createElement('tr');
+            const riskClass = row.risk.toLowerCase();
+            const riskHtml = `<span class="risk-badge ${riskClass}">${row.risk}</span>`;
+            
+            tr.innerHTML = `
+                <td>${row.customerID}</td>
+                <td>${row.tenure}</td>
+                <td>${row.Contract}</td>
+                <td>$${row.MonthlyCharges}</td>
+                <td>${row.InternetService}</td>
+                <td>${(row.probability * 100).toFixed(1)}%</td>
+                <td>${riskHtml}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+        
+        csvData = data.csv_data;
+    }
+
+    downloadBtn.addEventListener('click', () => {
+        if (!csvData) return;
+        const blob = new Blob([csvData], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.setAttribute('hidden', '');
+        a.setAttribute('href', url);
+        a.setAttribute('download', 'churn_predictions.csv');
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    });
+</script>
+{% endblock %}

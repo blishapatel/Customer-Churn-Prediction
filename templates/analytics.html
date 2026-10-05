@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Analytics Dashboard — ChurnIQ{% endblock %}
+
+{% block content %}
+<div class="container-wide">
+    <div class="section-header">
+        <h2><i class="fa-solid fa-chart-bar"></i> Customer Analytics Dashboard</h2>
+    </div>
+
+    <div class="kpi-grid mb-5">
+        <div class="kpi-card">
+            <div class="icon-wrapper mb-2"><i class="fa-solid fa-users fa-2x" style="color: #3B5998;"></i></div>
+            <div class="kpi-content">
+                <div class="stat-label text-muted">Total Customers</div>
+                <div class="stat-value">{{ stats.total_customers }}</div>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="icon-wrapper mb-2"><i class="fa-solid fa-user-slash fa-2x text-danger"></i></div>
+            <div class="kpi-content">
+                <div class="stat-label text-muted">Churned Customers</div>
+                <div class="stat-value">{{ stats.churned }}</div>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="icon-wrapper mb-2"><i class="fa-solid fa-percentage fa-2x text-danger"></i></div>
+            <div class="kpi-content">
+                <div class="stat-label text-muted">Churn Rate</div>
+                <div class="stat-value">{{ stats.churn_rate }}%</div>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="icon-wrapper mb-2"><i class="fa-solid fa-dollar-sign fa-2x" style="color: #3B5998;"></i></div>
+            <div class="kpi-content">
+                <div class="stat-label text-muted">Avg Monthly Charges</div>
+                <div class="stat-value">${{ stats.avg_monthly }}</div>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="icon-wrapper mb-2"><i class="fa-solid fa-exclamation-circle fa-2x text-warning"></i></div>
+            <div class="kpi-content">
+                <div class="stat-label text-muted">Revenue at Risk</div>
+                <div class="stat-value">${{ stats.revenue_at_risk }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chart-grid">
+        {% for chart in charts %}
+        <div class="chart-card card">
+            <h3 class="mb-3">{{ chart.title }}</h3>
+            <img src="{{ url_for('chart', filename=chart.filename) }}" alt="{{ chart.title }}" class="img-fluid mb-3">
+            <div class="insight alert alert-info mb-0">
+                <i class="fa-solid fa-lightbulb"></i> {{ chart.insight }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

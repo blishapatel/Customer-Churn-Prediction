@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ChurnIQ{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="{{ url_for('home') }}" class="navbar-brand">
+            <i class="fas fa-chart-line"></i> Churn<span>IQ</span>
+        </a>
+        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}" class="{% if active_page == 'home' %}active{% endif %}"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="{{ url_for('predict') }}" class="{% if active_page == 'predict' %}active{% endif %}"><i class="fas fa-magic"></i> Predict</a></li>
+            <li><a href="{{ url_for('bulk') }}" class="{% if active_page == 'bulk' %}active{% endif %}"><i class="fas fa-file-upload"></i> Bulk Upload</a></li>
+            <li><a href="{{ url_for('analytics') }}" class="{% if active_page == 'analytics' %}active{% endif %}"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+            <li><a href="{{ url_for('risk') }}" class="{% if active_page == 'risk' %}active{% endif %}"><i class="fas fa-exclamation-triangle"></i> Risk</a></li>
+            <li><a href="{{ url_for('recommendations') }}" class="{% if active_page == 'recommendations' %}active{% endif %}"><i class="fas fa-lightbulb"></i> Actions</a></li>
+        </ul>
+    </nav>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div style="text-align:center;">
+            <div class="spinner" style="width:48px;height:48px;border-width:5px;"></div>
+            <p style="margin-top:16px;color:#1B2A4A;font-weight:600;">Processing...</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><i class="fas fa-chart-line"></i> ChurnIQ — Customer Churn Analytics & Retention Decision Support System</p>
+        <p style="margin-top:4px;opacity:0.7;">Built with Python, Flask, Scikit-learn & XGBoost</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,39 @@
+DATA-DRIVEN BUSINESS RECOMMENDATIONS
+========================================
+
+Recommendation #1:
+- Finding: Month-to-month contracts have the highest churn rate at 42.6%.
+- Impact: 3853 customers affected.
+- Recommendation: Offer incentives (e.g., first month free or discounts) to switch to 1-year or 2-year contracts.
+- Expected Benefit: Increase customer commitment and reduce short-term churn.
+
+Recommendation #2:
+- Finding: New customers (0-1 yr) have the highest churn rate at 47.4%.
+- Impact: 2164 customers affected.
+- Recommendation: Implement targeted onboarding programs and early touchpoints.
+- Expected Benefit: Improve early retention and user experience.
+
+Recommendation #3:
+- Finding: Electronic check users have the highest churn rate at 45.1%.
+- Impact: 2359 customers affected.
+- Recommendation: Encourage migration to automatic payments (Credit Card/Bank Transfer) via small discounts.
+- Expected Benefit: Reduce payment friction and involuntary churn.
+
+Recommendation #4:
+- Finding: Customers without Tech Support churn at a rate of 41.5%.
+- Impact: 3465 customers affected.
+- Recommendation: Bundle Tech Support with core internet services or offer a free trial.
+- Expected Benefit: Increase product stickiness and customer satisfaction.
+
+Recommendation #5:
+- Finding: Fiber optic customers have the highest churn rate at 41.8%.
+- Impact: 3090 customers affected.
+- Recommendation: Investigate Fiber Optic service quality, reliability, and pricing.
+- Expected Benefit: Address specific service issues and retain high-value customers.
+
+Recommendation #6:
+- Finding: Churned customers pay on average $74.60, which is higher than retained customers ($61.34).
+- Impact: All 7021 customers potentially impacted by pricing.
+- Recommendation: Conduct a pricing review and offer flexible, personalized plans.
+- Expected Benefit: Prevent customers from leaving due to cost concerns.
+

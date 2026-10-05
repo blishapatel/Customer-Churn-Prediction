@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Home — ChurnIQ{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>CUSTOMER CHURN <strong>ANALYTICS</strong></h1>
+    <div class="tagline">Predict. Understand. Retain.</div>
+    <div class="subtitle">Identify customers at risk of leaving and make data-driven retention decisions using machine learning.</div>
+    <div class="hero-buttons">
+        <a href="{{ url_for('predict') }}" class="btn btn-primary btn-lg">Predict Customer Churn</a>
+        <a href="{{ url_for('analytics') }}" class="btn btn-outline btn-lg">Explore Analytics</a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="stat-banner">
+        <div class="stat-item">
+            <div class="stat-value">7,043</div>
+            <div class="stat-label">Customers Analyzed</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">26.5%</div>
+            <div class="stat-label">Churn Rate Detected</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value"><i class="fa-solid fa-microchip"></i></div>
+            <div class="stat-label">ML-Powered Predictions</div>
+        </div>
+    </div>
+</div>
+
+<div class="container section">
+    <h2>What would you like to do?</h2>
+    <div class="action-grid">
+        <div class="action-card card-clickable" onclick="window.location.href='{{ url_for('predict') }}'">
+            <i class="fa-solid fa-magic fa-2x" style="color: #3B5998; margin-bottom: 1rem;"></i>
+            <h3>Predict Churn</h3>
+            <p>Enter a customer's details and get instant churn probability with risk level and explanation.</p>
+        </div>
+        <div class="action-card card-clickable" onclick="window.location.href='{{ url_for('analytics') }}'">
+            <i class="fa-solid fa-chart-bar fa-2x" style="color: #3B5998; margin-bottom: 1rem;"></i>
+            <h3>View Analytics</h3>
+            <p>Explore customer data, churn patterns, and business insights through interactive charts.</p>
+        </div>
+        <div class="action-card card-clickable" onclick="window.location.href='{{ url_for('bulk') }}'">
+            <i class="fa-solid fa-file-upload fa-2x" style="color: #3B5998; margin-bottom: 1rem;"></i>
+            <h3>Upload Customer Data</h3>
+            <p>Upload a CSV file of customers to predict churn for all at once and export high-risk list.</p>
+        </div>
+    </div>
+</div>
+
+<div class="how-it-works section" style="background-color: #f8f9fa; padding: 3rem 0;">
+    <div class="container">
+        <h2 style="text-align: center; margin-bottom: 2rem;">How It Works</h2>
+        <div class="steps-grid">
+            <div class="step">
+                <div class="step-num">1</div>
+                <i class="fa-solid fa-database fa-2x" style="color: #1B2A4A; margin: 1rem 0;"></i>
+                <h3>Analyze</h3>
+                <p>Upload or explore customer data</p>
+            </div>
+            <div class="step-arrow" style="display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #6c757d;">&rarr;</div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <i class="fa-solid fa-brain fa-2x" style="color: #1B2A4A; margin: 1rem 0;"></i>
+                <h3>Predict</h3>
+                <p>ML model calculates churn risk</p>
+            </div>
+            <div class="step-arrow" style="display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #6c757d;">&rarr;</div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <i class="fa-solid fa-handshake fa-2x" style="color: #1B2A4A; margin: 1rem 0;"></i>
+                <h3>Retain</h3>
+                <p>Take data-driven retention actions</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

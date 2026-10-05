@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Recommendations — ChurnIQ{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section-header">
+        <h2><i class="fa-solid fa-lightbulb"></i> Retention Recommendations</h2>
+    </div>
+
+    <div class="alert alert-info">
+        Data-driven recommendations based on churn pattern analysis. Each recommendation is backed by statistical evidence from the customer dataset.
+    </div>
+
+    <div class="rec-grid">
+        {% for rec in recommendations %}
+        <div class="rec-card card">
+            <div class="rec-number">{{ rec.number }}</div>
+            <h3><i class="{{ rec.icon }}"></i> {{ rec.title }}</h3>
+            <div class="rec-finding">
+                <strong>Finding:</strong> {{ rec.finding }}
+            </div>
+            <div class="rec-action" style="margin-top: 15px;">
+                <div style="color: #3B5998; font-weight: bold; margin-bottom: 5px;">Impact: {{ rec.impact }}</div>
+                <div style="margin-bottom: 5px;"><strong>Action:</strong> {{ rec.action }}</div>
+                <div><strong>Expected Benefit:</strong> {{ rec.benefit }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="card" style="margin-top: 30px;">
+        <h3>Next Steps</h3>
+        <ol style="margin-bottom: 20px;">
+            <li>Review high-risk customers in the Risk Analysis section</li>
+            <li>Prioritize customers with churn probability above 60%</li>
+            <li>Implement the recommended retention strategies for each segment</li>
+            <li>Monitor churn rate monthly and re-train the model quarterly</li>
+        </ol>
+        <a href="{{ url_for('risk') }}" class="btn btn-primary">
+            View High-Risk Customers <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}

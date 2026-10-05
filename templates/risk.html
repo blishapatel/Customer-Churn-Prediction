@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Risk Analysis — ChurnIQ{% endblock %}
+
+{% block content %}
+<div class="container-wide">
+    <div class="section-header">
+        <h2><i class="fa-solid fa-exclamation-triangle"></i> Customer Risk Analysis</h2>
+    </div>
+    
+    <div class="alert alert-info">
+        Customers scored using the trained ML model. Focus retention efforts on high-risk customers.
+    </div>
+
+    <div class="risk-summary">
+        <div class="risk-summary-card high">
+            <div class="count">{{ risk_stats.high_count }}</div>
+            <div class="label">High Risk (60-100%) — {{ risk_stats.high_pct }}%</div>
+        </div>
+        <div class="risk-summary-card medium">
+            <div class="count">{{ risk_stats.medium_count }}</div>
+            <div class="label">Medium Risk (30-60%) — {{ risk_stats.medium_pct }}%</div>
+        </div>
+        <div class="risk-summary-card low">
+            <div class="count">{{ risk_stats.low_count }}</div>
+            <div class="label">Low Risk (0-30%) — {{ risk_stats.low_pct }}%</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>High-Risk Customer Profile</h3>
+        <div style="display: flex; flex-direction: row; justify-content: space-between; gap: 15px;">
+            <div class="stat-box" style="flex: 1; text-align: center; padding: 15px; border: 1px solid #dee2e6; border-radius: 5px;">
+                <div style="color: #6c757d; font-size: 0.9em; margin-bottom: 5px;">Avg Tenure</div>
+                <div style="color: #1B2A4A; font-size: 1.2em; font-weight: bold;">{{ avg_tenure }}</div>
+            </div>
+            <div class="stat-box" style="flex: 1; text-align: center; padding: 15px; border: 1px solid #dee2e6; border-radius: 5px;">
+                <div style="color: #6c757d; font-size: 0.9em; margin-bottom: 5px;">Common Contract</div>
+                <div style="color: #1B2A4A; font-size: 1.2em; font-weight: bold;">{{ common_contract }}</div>
+            </div>
+            <div class="stat-box" style="flex: 1; text-align: center; padding: 15px; border: 1px solid #dee2e6; border-radius: 5px;">
+                <div style="color: #6c757d; font-size: 0.9em; margin-bottom: 5px;">Common Internet</div>
+                <div style="color: #1B2A4A; font-size: 1.2em; font-weight: bold;">{{ common_internet }}</div>
+            </div>
+            <div class="stat-box" style="flex: 1; text-align: center; padding: 15px; border: 1px solid #dee2e6; border-radius: 5px;">
+                <div style="color: #6c757d; font-size: 0.9em; margin-bottom: 5px;">Avg Monthly Charges</div>
+                <div style="color: #1B2A4A; font-size: 1.2em; font-weight: bold;">{{ avg_monthly_charges }}</div>
+            </div>
+        </div>
+    </div>
+
+    {% if risk_charts %}
+    <div class="chart-grid" style="margin-top: 20px; margin-bottom: 20px;">
+        {% for chart in risk_charts %}
+        <div class="chart-card card">
+            <h3>{{ chart.title }}</h3>
+            <img src="{{ url_for('chart', filename=chart.filename) }}" alt="{{ chart.title }}" style="max-width: 100%; height: auto;">
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="section-header" style="margin-top: 30px;">
+        <h2>High-Risk Customers</h2>
+    </div>
+    <div class="table-wrapper">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Tenure</th>
+                    <th>Contract</th>
+                    <th>Monthly Charges</th>
+                    <th>Internet Service</th>
+                    <th>Tech Support</th>
+                    <th>Churn Probability</th>
+                    <th>Risk Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in high_risk_customers %}
+                <tr>
+                    <td>{{ customer.customerID }}</td>
+                    <td>{{ customer.tenure }}</td>
+                    <td>{{ customer.Contract }}</td>
+                    <td>{{ customer.MonthlyCharges }}</td>
+                    <td>{{ customer.InternetService }}</td>
+                    <td>{{ customer.TechSupport }}</td>
+                    <td>
+                        {% if customer.Churn_Probability is number %}
+                            {% if customer.Churn_Probability <= 1 %}
+                                {{ (customer.Churn_Probability * 100) | round(1) }}%
+                            {% else %}
+                                {{ customer.Churn_Probability | round(1) }}%
+                            {% endif %}
+                        {% else %}
+                            {{ customer.Churn_Probability }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% set rlevel = (customer.Risk_Category|string)|lower %}
+                        {% if 'high' in rlevel %}
+                            <span class="risk-badge high">{{ customer.Risk_Category }}</span>
+                        {% elif 'medium' in rlevel %}
+                            <span class="risk-badge medium">{{ customer.Risk_Category }}</span>
+                        {% else %}
+                            <span class="risk-badge low">{{ customer.Risk_Category }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

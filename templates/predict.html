@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+
+{% block title %}Predict Churn — ChurnIQ{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section-header">
+        <h2><i class="fa-solid fa-magic"></i> Predict Customer Churn</h2>
+    </div>
+    
+    <div class="alert alert-info">
+        <i class="fa-solid fa-info-circle"></i> Enter a customer's details below and click Predict to calculate their churn probability and risk level.
+    </div>
+
+    <div class="card">
+        <form id="predictForm">
+            <div class="form-grid">
+                <!-- Row 1 -->
+                <div class="form-group">
+                    <label for="tenure">Tenure (months)</label>
+                    <input type="number" id="tenure" name="tenure" min="0" max="72" placeholder="e.g. 12" required class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="Contract">Contract</label>
+                    <select id="Contract" name="Contract" required class="form-control">
+                        <option value="Month-to-month">Month-to-month</option>
+                        <option value="One year">One year</option>
+                        <option value="Two year">Two year</option>
+                    </select>
+                </div>
+                
+                <!-- Row 2 -->
+                <div class="form-group">
+                    <label for="MonthlyCharges">Monthly Charges</label>
+                    <input type="number" id="MonthlyCharges" name="MonthlyCharges" step="0.01" min="0" placeholder="e.g. 70.00" required class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="InternetService">Internet Service</label>
+                    <select id="InternetService" name="InternetService" required class="form-control">
+                        <option value="DSL">DSL</option>
+                        <option value="Fiber optic">Fiber optic</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="form-group">
+                    <label for="PaymentMethod">Payment Method</label>
+                    <select id="PaymentMethod" name="PaymentMethod" required class="form-control">
+                        <option value="Electronic check">Electronic check</option>
+                        <option value="Mailed check">Mailed check</option>
+                        <option value="Bank transfer (automatic)">Bank transfer (automatic)</option>
+                        <option value="Credit card (automatic)">Credit card (automatic)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="TechSupport">Tech Support</label>
+                    <select id="TechSupport" name="TechSupport" required class="form-control">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                        <option value="No internet service">No internet service</option>
+                    </select>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="form-group">
+                    <label for="OnlineSecurity">Online Security</label>
+                    <select id="OnlineSecurity" name="OnlineSecurity" required class="form-control">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                        <option value="No internet service">No internet service</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="OnlineBackup">Online Backup</label>
+                    <select id="OnlineBackup" name="OnlineBackup" required class="form-control">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                        <option value="No internet service">No internet service</option>
+                    </select>
+                </div>
+
+                <!-- Row 5 -->
+                <div class="form-group">
+                    <label for="DeviceProtection">Device Protection</label>
+                    <select id="DeviceProtection" name="DeviceProtection" required class="form-control">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                        <option value="No internet service">No internet service</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="StreamingTV">Streaming TV</label>
+                    <select id="StreamingTV" name="StreamingTV" required class="form-control">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                        <option value="No internet service">No internet service</option>
+                    </select>
+                </div>
+
+                <!-- Row 6 -->
+                <div class="form-group">
+                    <label for="StreamingMovies">Streaming Movies</label>
+                    <select id="StreamingMovies" name="StreamingMovies" required class="form-control">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                        <option value="No internet service">No internet service</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" required class="form-control">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+
+                <!-- Row 7 -->
+                <div class="form-group">
+                    <label for="SeniorCitizen">Senior Citizen</label>
+                    <select id="SeniorCitizen" name="SeniorCitizen" required class="form-control">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="Partner">Partner</label>
+                    <select id="Partner" name="Partner" required class="form-control">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <!-- Row 8 -->
+                <div class="form-group">
+                    <label for="Dependents">Dependents</label>
+                    <select id="Dependents" name="Dependents" required class="form-control">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="PhoneService">Phone Service</label>
+                    <select id="PhoneService" name="PhoneService" required class="form-control">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <!-- Row 9 -->
+                <div class="form-group">
+                    <label for="MultipleLines">Multiple Lines</label>
+                    <select id="MultipleLines" name="MultipleLines" required class="form-control">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                        <option value="No phone service">No phone service</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="PaperlessBilling">Paperless Billing</label>
+                    <select id="PaperlessBilling" name="PaperlessBilling" required class="form-control">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; text-align: center;">
+                <button type="button" id="predictBtn" class="btn btn-primary btn-lg"><i class="fa-solid fa-magic"></i> Predict Churn</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="resultPanel" class="result-panel" style="display: none; margin-top: 2rem;">
+        <div class="probability-circle" style="margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 200px; height: 200px; border-radius: 50%; border: 10px solid #f8f9fa;">
+            <div class="probability-value" id="probValue" style="font-size: 3rem; font-weight: bold; color: #1B2A4A;">0%</div>
+            <div class="probability-label" style="color: #6c757d; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">Churn Probability</div>
+        </div>
+        <div style="text-align: center; margin: 2rem 0;">
+            <span id="riskBadge" class="risk-badge">Low Risk</span>
+            <p id="riskDesc" style="margin-top: 1rem; color: #6c757d; font-size: 1.1rem;"></p>
+        </div>
+        
+        <h3 style="text-align: center; margin-top: 2rem; color: #1B2A4A;">Key Contributing Factors</h3>
+        <div id="factorsGrid" class="factors-grid" style="margin-top: 1rem;">
+            <!-- Populated dynamically -->
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="{{ url_for('recommendations') }}" class="btn btn-primary btn-lg">View Recommendations</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('predictBtn').addEventListener('click', async function() {
+    const form = document.getElementById('predictForm');
+    if(!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+    
+    const btn = document.getElementById('predictBtn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Predicting...';
+    btn.disabled = true;
+
+    const formData = new FormData(form);
+    const data = {};
+    formData.forEach((value, key) => {
+        // Convert numbers if appropriate
+        if(key === 'tenure' || key === 'MonthlyCharges') {
+            data[key] = parseFloat(value);
+        } else {
+            data[key] = value;
+        }
+    });
+
+    try {
+        const response = await fetch('/api/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if(!response.ok) {
+            throw new Error(`Server returned ${response.status} ${response.statusText}`);
+        }
+        
+        const result = await response.json();
+        
+        const resultPanel = document.getElementById('resultPanel');
+        resultPanel.style.display = 'block';
+        
+        // Update probability (assuming it returns a number between 0 and 1, or percentage)
+        const prob = result.probability;
+        const probValue = typeof prob === 'number' && prob <= 1.0 ? prob * 100 : parseFloat(prob);
+        document.getElementById('probValue').innerText = probValue.toFixed(1) + '%';
+        
+        // Update probability circle border color based on risk
+        const circle = document.querySelector('.probability-circle');
+        
+        const riskLevel = result.risk_level || 'Low';
+        const riskBadge = document.getElementById('riskBadge');
+        riskBadge.className = 'risk-badge ' + riskLevel.toLowerCase();
+        riskBadge.innerText = riskLevel + ' Risk';
+        
+        resultPanel.className = 'result-panel ' + riskLevel.toLowerCase();
+        
+        if (riskLevel.toLowerCase() === 'high') {
+            circle.style.borderColor = '#dc3545';
+        } else if (riskLevel.toLowerCase() === 'medium') {
+            circle.style.borderColor = '#ffc107';
+        } else {
+            circle.style.borderColor = '#28a745';
+        }
+        
+        document.getElementById('riskDesc').innerText = result.explanation || 'Prediction generated successfully based on customer profile.';
+        
+        const factorsGrid = document.getElementById('factorsGrid');
+        factorsGrid.innerHTML = '';
+        if (result.factors && result.factors.length > 0) {
+            result.factors.forEach(factor => {
+                const fCard = document.createElement('div');
+                const isNegative = factor.impact > 0; // Positive impact on churn = bad for retention (negative)
+                const directionClass = isNegative ? 'negative' : 'positive';
+                fCard.className = `factor-card ${directionClass}`;
+                
+                fCard.innerHTML = `
+                    <div class="factor-name">${factor.name}</div>
+                    <div class="factor-impact">${factor.impact > 0 ? '+' : ''}${(factor.impact * 100).toFixed(1)}%</div>
+                `;
+                factorsGrid.appendChild(fCard);
+            });
+        } else {
+            factorsGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #6c757d;">No specific factors provided.</p>';
+        }
+        
+        resultPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (err) {
+        alert('Error predicting churn: ' + err.message);
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+});
+</script>
+{% endblock %}
